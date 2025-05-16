@@ -38,9 +38,18 @@
       font-weight: bold;
       margin: 0;
     }
-    .product h2 {
+    h2 {
       margin-top: 0;
       color: #7f4b1e;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+    }
+    label {
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+      color: #7f4b1e;
+      margin-top: 10px;
+      display: block;
     }
     select, input {
       padding: 12px;
@@ -93,17 +102,27 @@
     </div>
 
     <div class="product">
+      <label for="customerName">Enter your name:</label>
+      <input type="text" id="customerName" placeholder="Name" />
+
+      <label for="pincode">Enter delivery pincode:</label>
+      <input type="text" id="pincode" placeholder="Eg: 600001" />
+
+      <br /> <br />
+
       <h2>Select Product & Quantity</h2>
+
       <label for="product">Product:</label>
       <select id="product" onchange="updateQuantities()">
         <option value="sambar_powder">Sambar Powder</option>
+        <option value="rasam_powder">Rasam Powder</option>
+        <option value="idli_podi">Idli Podi</option>
+        <option value="paruppu_podi">Paruppu Podi</option>
+        <option value="ellu_podi">Ellu Podi</option>
       </select>
 
       <label for="quantity">Quantity:</label>
-      <select id="quantity">
-        <option value="500">500g - ₹250</option>
-        <option value="1000">1kg - ₹500</option>
-      </select>
+      <select id="quantity"></select>
 
       <label for="qty">How many packs?</label>
       <input type="number" id="qty" value="1" min="1" />
@@ -121,6 +140,30 @@
         { value: 500, label: "500g - ₹250", price: 250 },
         { value: 1000, label: "1kg - ₹500", price: 500 },
       ],
+      rasam_powder: [
+        { value: 500, label: "500g", price: 0 },
+        { value: 1000, label: "1kg", price: 0 },
+      ],
+      idli_podi: [
+        { value: 500, label: "500g", price: 0 },
+        { value: 1000, label: "1kg", price: 0 },
+      ],
+      paruppu_podi: [
+        { value: 500, label: "500g", price: 0 },
+        { value: 1000, label: "1kg", price: 0 },
+      ],
+      ellu_podi: [
+        { value: 500, label: "500g", price: 0 },
+        { value: 1000, label: "1kg", price: 0 },
+      ],
+    };
+
+    const productNameMap = {
+      sambar_powder: "Sambar Powder",
+      rasam_powder: "Rasam Powder",
+      idli_podi: "Idli Podi",
+      paruppu_podi: "Paruppu Podi",
+      ellu_podi: "Ellu Podi",
     };
 
     function updateQuantities() {
@@ -137,6 +180,19 @@
     }
 
     function placeOrder() {
+      const nameInput = document.getElementById("customerName").value.trim();
+      const pincode = document.getElementById("pincode").value.trim();
+
+      if (!nameInput) {
+        alert("Please enter your name");
+        return;
+      }
+
+      if (!pincode) {
+        alert("Please enter your delivery pincode");
+        return;
+      }
+
       const productSelect = document.getElementById("product");
       const quantitySelect = document.getElementById("quantity");
       const packs = parseInt(document.getElementById("qty").value);
@@ -149,14 +205,17 @@
         return;
       }
 
-      const productNameMap = {
-        sambar_powder: "Sambar Powder",
-      };
-
       const selectedQuantity = productQuantities[selectedProduct].find(q => q.value === quantity);
-      const price = selectedQuantity.price * packs;
 
-      const message = `Hi! I would like to order ${packs} pack(s) of ${productNameMap[selectedProduct]} (${quantity}g each). Total: ${totalGrams}g. Total Price: ₹${price}`;
+      let priceText = "";
+      if (selectedProduct === "sambar_powder") {
+        const totalPrice = selectedQuantity.price * packs;
+        priceText = `Total Price: ₹${totalPrice}`;
+      } else {
+        priceText = "Can you please share the price upon confirmation?";
+      }
+
+      const message = `Hi! I am ${nameInput}.\nI would like to order ${packs} pack(s) of ${productNameMap[selectedProduct]} (${quantity}g each). \nTotal: ${totalGrams}g. ${priceText}\nDelivery Pincode: ${pincode}\nThank you!`;
       const whatsappUrl = `https://wa.me/916383134699?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, "_blank");
     }
