@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Namma Nattu Podi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5ebe0;
+      padding: 20px;
+      color: #5c3a21;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: #fff3e6;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 4px 10px rgba(92, 58, 33, 0.2);
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    .header img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-right: 15px;
+      object-fit: cover;
+      box-shadow: 0 2px 6px rgba(160, 82, 45, 0.4);
+    }
+    h1 {
+      color: #a0522d;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+      margin: 0;
+    }
+    .product h2 {
+      margin-top: 0;
+      color: #7f4b1e;
+    }
+    select, input {
+      padding: 12px;
+      margin-top: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      border: 2px solid #a0522d;
+      border-radius: 8px;
+      font-size: 16px;
+      background: #fff8f0;
+      color: #5c3a21;
+      font-family: 'Georgia', serif;
+    }
+    button {
+      padding: 12px;
+      background: #a0522d;
+      color: white;
+      border: none;
+      width: 100%;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 16px;
+      font-family: 'Georgia', serif;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #7f3d13;
+    }
+    .note {
+      color: #a0522d;
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+      font-family: 'Georgia', serif;
+    }
+    .note.small {
+      font-weight: normal;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="granny-cook.png" alt="Granny Cooking" />
+      <h1>Namma Nattu Podi</h1>
+    </div>
+
+    <div class="product">
+      <h2>Select Product & Quantity</h2>
+      <label for="product">Product:</label>
+      <select id="product" onchange="updateQuantities()">
+        <option value="sambar_powder">Sambar Powder</option>
+      </select>
+
+      <label for="quantity">Quantity:</label>
+      <select id="quantity">
+        <option value="500">500g - ₹250</option>
+        <option value="1000">1kg - ₹500</option>
+      </select>
+
+      <label for="qty">How many packs?</label>
+      <input type="number" id="qty" value="1" min="1" />
+
+      <button onclick="placeOrder()">Order via WhatsApp</button>
+    </div>
+
+    <p class="note">Minimum Order: 500g</p>
+    <p class="note small">Note: Courier charges excluded</p>
+  </div>
+
+  <script>
+    const productQuantities = {
+      sambar_powder: [
+        { value: 500, label: "500g - ₹250", price: 250 },
+        { value: 1000, label: "1kg - ₹500", price: 500 },
+      ],
+    };
+
+    function updateQuantities() {
+      const productSelect = document.getElementById("product");
+      const quantitySelect = document.getElementById("quantity");
+      const selectedProduct = productSelect.value;
+      quantitySelect.innerHTML = "";
+      productQuantities[selectedProduct].forEach((qty) => {
+        const option = document.createElement("option");
+        option.value = qty.value;
+        option.textContent = qty.label;
+        quantitySelect.appendChild(option);
+      });
+    }
+
+    function placeOrder() {
+      const productSelect = document.getElementById("product");
+      const quantitySelect = document.getElementById("quantity");
+      const packs = parseInt(document.getElementById("qty").value);
+      const selectedProduct = productSelect.value;
+      const quantity = parseInt(quantitySelect.value);
+      const totalGrams = packs * quantity;
+
+      if (totalGrams < 500) {
+        alert("Minimum order quantity is 500g. Please increase the quantity.");
+        return;
+      }
+
+      const productNameMap = {
+        sambar_powder: "Sambar Powder",
+      };
+
+      const selectedQuantity = productQuantities[selectedProduct].find(q => q.value === quantity);
+      const price = selectedQuantity.price * packs;
+
+      const message = `Hi! I would like to order ${packs} pack(s) of ${productNameMap[selectedProduct]} (${quantity}g each). Total: ${totalGrams}g. Total Price: ₹${price}`;
+      const whatsappUrl = `https://wa.me/916383134699?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, "_blank");
+    }
+
+    window.onload = updateQuantities;
+  </script>
+</body>
+</html>
