@@ -12,13 +12,53 @@
       color: #5c3a21;
     }
     .container {
-      max-width: 700px;
+      max-width: 900px;
       margin: auto;
       background: #fff3e6;
       border-radius: 15px;
       padding: 30px;
       box-shadow: 0 4px 10px rgba(92, 58, 33, 0.2);
     }
+    /* Slogan bar */
+    .slogan {
+      background: linear-gradient(90deg, #ff7e5f, #feb47b);
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      text-align: center;
+      padding: 18px 25px;
+      border-radius: 30px;
+      max-width: 900px;
+      margin: 0 auto 35px auto;
+      box-shadow: 0 4px 15px rgba(255, 126, 95, 0.5);
+      letter-spacing: 0.03em;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      animation: pulse 3s infinite ease-in-out;
+    }
+    .slogan span {
+      font-size: 1.8rem;
+      animation: float 3s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 4px 15px rgba(255, 126, 95, 0.5);
+      }
+      50% {
+        box-shadow: 0 6px 30px rgba(255, 126, 95, 0.8);
+      }
+    }
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-4px);
+      }
+    }
+
     .header {
       display: flex;
       align-items: center;
@@ -92,10 +132,110 @@
       font-size: 14px;
       margin-top: 5px;
     }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .product-group {
+      border: 1px solid #a0522d;
+      border-radius: 10px;
+      padding: 15px;
+      background: #fffdf8;
+    }
+    #totals {
+      margin-top: 20px;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+      text-align: right;
+      line-height: 1.6;
+    }
+    #totalQuantityLabel {
+      color: #4a7c59;  /* warm brown */
+    }
+    #totalPriceLabel {
+      color: #4a7c59;  /* greenish */
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+        font-size: 14px;
+      }
+
+      .container {
+        padding: 20px;
+        border-radius: 10px;
+      }
+
+      .slogan {
+        font-size: 1.1rem;
+        padding: 14px 20px;
+        max-width: 100%;
+        border-radius: 20px;
+        gap: 8px;
+      }
+
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .header img {
+        width: 50px;
+        height: 50px;
+        margin-right: 0;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+      }
+
+      label {
+        font-size: 14px;
+      }
+
+      select, input, button {
+        font-size: 16px; /* Keep inputs easily tappable */
+      }
+
+      .product-grid {
+        grid-template-columns: 1fr; /* Single column stack */
+        gap: 15px;
+      }
+
+      #totals {
+        text-align: left;
+        font-size: 14px;
+      }
+
+      button {
+        padding: 14px;
+      }
+
+      .note {
+        font-size: 14px;
+      }
+
+      .note.small {
+        font-size: 12px;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
+    <div class="slogan">
+      <span>🌿</span> Spice Up Life, The Natural Way — <strong>100% Homemade Masala Powder</strong>
+    </div>
+
     <div class="header">
       <img src="granny-cook.png" alt="Granny Cooking" />
       <h1>Namma Nattu Podi</h1>
@@ -103,29 +243,21 @@
 
     <div class="product">
       <label for="customerName">Enter your name:</label>
-      <input type="text" id="customerName" placeholder="Name" />
+      <input type="text" id="customerName" placeholder="Name" required />
 
       <label for="pincode">Enter delivery pincode:</label>
-      <input type="text" id="pincode" placeholder="Eg: 600001" />
+      <input type="text" id="pincode" placeholder="Eg: 600001" required />
 
-      <br /> <br />
+      <br /><br />
 
-      <h2>Select Product & Quantity</h2>
+      <h2>Select Products & Quantities</h2>
 
-      <label for="product">Product:</label>
-      <select id="product" onchange="updateQuantities()">
-        <option value="sambar_powder">Sambar Powder</option>
-        <option value="rasam_powder">Rasam Powder</option>
-        <option value="idli_podi">Idli Podi</option>
-        <option value="paruppu_podi">Paruppu Podi</option>
-        <option value="ellu_podi">Ellu Podi</option>
-      </select>
+      <div id="productInputs" class="product-grid"></div>
 
-      <label for="quantity">Quantity:</label>
-      <select id="quantity"></select>
-
-      <label for="qty">How many packs?</label>
-      <input type="number" id="qty" value="1" min="1" />
+      <div id="totals">
+        <span id="totalQuantityLabel">Total Quantity:</span> <span id="totalQuantity">0g</span><br /><br />
+        <span id="totalPriceLabel">Total Price:</span> <span id="totalPrice">₹0</span>
+      </div>
 
       <button onclick="placeOrder()">Order via WhatsApp</button>
     </div>
@@ -137,46 +269,60 @@
   <script>
     const productQuantities = {
       sambar_powder: [
-        { value: 500, label: "500g - ₹250", price: 250 },
-        { value: 1000, label: "1kg - ₹500", price: 500 },
+        { value: 500, label: "500g - ₹300", price: 300 },
+        { value: 1000, label: "1kg - ₹600", price: 600 },
       ],
-      rasam_powder: [
-        { value: 500, label: "500g", price: 0 },
-        { value: 1000, label: "1kg", price: 0 },
-      ],
-      idli_podi: [
-        { value: 500, label: "500g", price: 0 },
-        { value: 1000, label: "1kg", price: 0 },
-      ],
-      paruppu_podi: [
-        { value: 500, label: "500g", price: 0 },
-        { value: 1000, label: "1kg", price: 0 },
-      ],
-      ellu_podi: [
-        { value: 500, label: "500g", price: 0 },
-        { value: 1000, label: "1kg", price: 0 },
+      curry_powder: [
+        { value: 500, label: "500g - ₹400", price: 400 },
+        { value: 1000, label: "1kg - ₹800", price: 800 },
       ],
     };
 
     const productNameMap = {
       sambar_powder: "Sambar Powder",
-      rasam_powder: "Rasam Powder",
-      idli_podi: "Idli Podi",
-      paruppu_podi: "Paruppu Podi",
-      ellu_podi: "Ellu Podi",
+      curry_powder: "Curry Powder (Meat Masala)",
     };
 
-    function updateQuantities() {
-      const productSelect = document.getElementById("product");
-      const quantitySelect = document.getElementById("quantity");
-      const selectedProduct = productSelect.value;
-      quantitySelect.innerHTML = "";
-      productQuantities[selectedProduct].forEach((qty) => {
-        const option = document.createElement("option");
-        option.value = qty.value;
-        option.textContent = qty.label;
-        quantitySelect.appendChild(option);
+    function createProductInputs() {
+      const container = document.getElementById("productInputs");
+      container.innerHTML = "";
+
+      Object.keys(productQuantities).forEach((productKey) => {
+        const group = document.createElement("div");
+        group.className = "product-group";
+
+        const label = document.createElement("label");
+        label.textContent = productNameMap[productKey];
+
+        const quantitySelect = document.createElement("select");
+        quantitySelect.id = `${productKey}_quantity`;
+        quantitySelect.onchange = updateTotals;
+        productQuantities[productKey].forEach((qty) => {
+          const option = document.createElement("option");
+          option.value = qty.value;
+          option.textContent = qty.label;
+          quantitySelect.appendChild(option);
+        });
+
+        const packLabel = document.createElement("label");
+        packLabel.textContent = "How many packs?";
+
+        const packInput = document.createElement("input");
+        packInput.type = "number";
+        packInput.id = `${productKey}_packs`;
+        packInput.min = 0;
+        packInput.value = 0;
+        packInput.oninput = updateTotals;
+
+        group.appendChild(label);
+        group.appendChild(quantitySelect);
+        group.appendChild(packLabel);
+        group.appendChild(packInput);
+
+        container.appendChild(group);
       });
+
+      updateTotals();
     }
 
     function placeOrder() {
@@ -188,39 +334,82 @@
         return;
       }
 
-      if (!pincode) {
-        alert("Please enter your delivery pincode");
+      if (!/^\d{6}$/.test(pincode)) {
+        alert("Please enter a valid 6-digit delivery pincode");
         return;
       }
 
-      const productSelect = document.getElementById("product");
-      const quantitySelect = document.getElementById("quantity");
-      const packs = parseInt(document.getElementById("qty").value);
-      const selectedProduct = productSelect.value;
-      const quantity = parseInt(quantitySelect.value);
-      const totalGrams = packs * quantity;
+      let message = `Hi! I am ${nameInput}.\nI would like to place an order:\n`;
+      let totalGrams = 0;
+      let totalPrice = 0;
+      let atLeastOneProduct = false;
+
+      Object.keys(productQuantities).forEach((productKey) => {
+        const packs = parseInt(document.getElementById(`${productKey}_packs`).value);
+        const quantity = parseInt(document.getElementById(`${productKey}_quantity`).value);
+
+        if (packs > 0 && quantity > 0) {
+          const productLabel = productNameMap[productKey];
+          const selectedQuantity = productQuantities[productKey].find(
+            (q) => q.value === quantity
+          );
+          const subtotal = selectedQuantity.price * packs;
+          totalPrice += subtotal;
+          const grams = packs * quantity;
+          totalGrams += grams;
+          atLeastOneProduct = true;
+
+          message += `\n${packs} pack(s) of ${productLabel} (${quantity}g each) - ₹${subtotal}`;
+        }
+      });
+
+      if (!atLeastOneProduct) {
+        alert("Please select at least one product with a valid pack count");
+        return;
+      }
 
       if (totalGrams < 500) {
-        alert("Minimum order quantity is 500g. Please increase the quantity.");
+        alert("Minimum order quantity is 500g. Please increase the quantity");
         return;
       }
 
-      const selectedQuantity = productQuantities[selectedProduct].find(q => q.value === quantity);
-
-      let priceText = "";
-      if (selectedProduct === "sambar_powder") {
-        const totalPrice = selectedQuantity.price * packs;
-        priceText = `Total Price: ₹${totalPrice}`;
-      } else {
-        priceText = "Can you please share the price upon confirmation?";
-      }
-
-      const message = `Hi! I am ${nameInput}.\nI would like to order ${packs} pack(s) of ${productNameMap[selectedProduct]} (${quantity}g each). \nTotal: ${totalGrams}g. ${priceText}\nDelivery Pincode: ${pincode}\nThank you!`;
+      message += `\n\nTotal Quantity: ${totalGrams}g\nTotal Price: ₹${totalPrice}\nDelivery Pincode: ${pincode}\nThank you!`;
       const whatsappUrl = `https://wa.me/916383134699?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, "_blank");
     }
 
-    window.onload = updateQuantities;
+    window.onload = createProductInputs;
+
+    function updateTotals() {
+      let totalGrams = 0;
+      let totalPrice = 0;
+
+      Object.keys(productQuantities).forEach((productKey) => {
+        const packs = parseInt(document.getElementById(`${productKey}_packs`).value) || 0;
+        const quantity = parseInt(document.getElementById(`${productKey}_quantity`).value) || 0;
+
+        if (packs > 0 && quantity > 0) {
+          const selectedQuantity = productQuantities[productKey].find(
+            (q) => q.value === quantity
+          );
+          const subtotal = selectedQuantity.price * packs;
+          const grams = packs * quantity;
+
+          totalGrams += grams;
+          totalPrice += subtotal;
+        }
+      });
+
+      // Display total quantity with "kg" if >= 1000g
+      if (totalGrams >= 1000) {
+        const kg = (totalGrams / 1000).toFixed(2).replace(/\.00$/, '');
+        document.getElementById("totalQuantity").textContent = `${kg}kg`;
+      } else {
+        document.getElementById("totalQuantity").textContent = `${totalGrams}g`;
+      }
+
+      document.getElementById("totalPrice").textContent = `₹${totalPrice}`;
+    }
   </script>
 </body>
 </html>
