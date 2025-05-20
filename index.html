@@ -10,6 +10,27 @@
       background: #f5ebe0;
       padding: 20px;
       color: #5c3a21;
+      margin: 0;
+    }
+    /* Slogan bar at the top */
+    .slogan-bar {
+      background: linear-gradient(90deg, #ff7e5f, #feb47b);
+      color: white;
+      font-weight: bold;
+      font-family: 'Georgia', serif;
+      font-size: 1.2rem;
+      text-align: center;
+      padding: 12px 20px;
+      border-radius: 0 0 15px 15px;
+      box-shadow: 0 5px 15px rgba(255, 126, 95, 0.5);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+    .slogan-bar .emoji {
+      font-size: 1.5rem;
     }
     .container {
       max-width: 900px;
@@ -19,46 +40,6 @@
       padding: 30px;
       box-shadow: 0 4px 10px rgba(92, 58, 33, 0.2);
     }
-    /* Slogan bar */
-    .slogan {
-      background: linear-gradient(90deg, #ff7e5f, #feb47b);
-      color: #fff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 1.4rem;
-      font-weight: 600;
-      text-align: center;
-      padding: 18px 25px;
-      border-radius: 30px;
-      max-width: 900px;
-      margin: 0 auto 35px auto;
-      box-shadow: 0 4px 15px rgba(255, 126, 95, 0.5);
-      letter-spacing: 0.03em;
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      animation: pulse 3s infinite ease-in-out;
-    }
-    .slogan span {
-      font-size: 1.8rem;
-      animation: float 3s infinite ease-in-out;
-    }
-    @keyframes pulse {
-      0%, 100% {
-        box-shadow: 0 4px 15px rgba(255, 126, 95, 0.5);
-      }
-      50% {
-        box-shadow: 0 6px 30px rgba(255, 126, 95, 0.8);
-      }
-    }
-    @keyframes float {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-4px);
-      }
-    }
-
     .header {
       display: flex;
       align-items: center;
@@ -151,12 +132,12 @@
       line-height: 1.6;
     }
     #totalQuantityLabel {
-      color: #4a7c59;  /* warm brown */
+      color: #4a7c59;
     }
     #totalPriceLabel {
-      color: #4a7c59;  /* greenish */
+      color: #4a7c59;
     }
-    
+
     /* Mobile responsiveness */
     @media (max-width: 600px) {
       body {
@@ -164,17 +145,15 @@
         font-size: 14px;
       }
 
+      .slogan-bar {
+        font-size: 1rem;
+        padding: 10px;
+        border-radius: 0 0 10px 10px;
+      }
+
       .container {
         padding: 20px;
         border-radius: 10px;
-      }
-
-      .slogan {
-        font-size: 1.1rem;
-        padding: 14px 20px;
-        max-width: 100%;
-        border-radius: 20px;
-        gap: 8px;
       }
 
       .header {
@@ -203,11 +182,11 @@
       }
 
       select, input, button {
-        font-size: 16px; /* Keep inputs easily tappable */
+        font-size: 16px;
       }
 
       .product-grid {
-        grid-template-columns: 1fr; /* Single column stack */
+        grid-template-columns: 1fr;
         gap: 15px;
       }
 
@@ -231,11 +210,13 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="slogan">
-      <span>🌿</span> Spice Up Life, The Natural Way — <strong>100% Homemade Masala Powder</strong>
-    </div>
+  <!-- Slogan bar above container -->
+  <div class="slogan-bar">
+    <span class="emoji">🌿</span>
+    Spice Up Life, The Natural Way — <strong>100% Homemade Masala Powder</strong>
+  </div>
 
+  <div class="container">
     <div class="header">
       <img src="granny-cook.png" alt="Granny Cooking" />
       <h1>Namma Nattu Podi</h1>
@@ -373,7 +354,7 @@
         return;
       }
 
-      message += `\n\nTotal Quantity: ${totalGrams}g\nTotal Price: ₹${totalPrice}\nDelivery Pincode: ${pincode}\nThank you!`;
+      message += `\n\nTotal Quantity: ${totalGrams >= 1000 ? (totalGrams/1000).toFixed(1) + "kg" : totalGrams + "g"}\nTotal Price: ₹${totalPrice}\nDelivery Pincode: ${pincode}\nThank you!`;
       const whatsappUrl = `https://wa.me/916383134699?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, "_blank");
     }
@@ -400,14 +381,9 @@
         }
       });
 
-      // Display total quantity with "kg" if >= 1000g
-      if (totalGrams >= 1000) {
-        const kg = (totalGrams / 1000).toFixed(2).replace(/\.00$/, '');
-        document.getElementById("totalQuantity").textContent = `${kg}kg`;
-      } else {
-        document.getElementById("totalQuantity").textContent = `${totalGrams}g`;
-      }
-
+      document.getElementById("totalQuantity").textContent = totalGrams >= 1000
+        ? (totalGrams / 1000).toFixed(1) + "kg"
+        : totalGrams + "g";
       document.getElementById("totalPrice").textContent = `₹${totalPrice}`;
     }
   </script>
