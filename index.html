@@ -12,7 +12,6 @@
       color: #5c3a21;
       margin: 0;
     }
-    /* Slogan bar at the top */
     .slogan-bar {
       background: linear-gradient(90deg, #ff7e5f, #feb47b);
       color: white;
@@ -138,71 +137,57 @@
       color: #4a7c59;
     }
 
-    /* Mobile responsiveness */
     @media (max-width: 600px) {
       body {
         padding: 10px;
         font-size: 14px;
       }
-
       .slogan-bar {
         font-size: 1rem;
         padding: 10px;
         border-radius: 0 0 10px 10px;
       }
-
       .container {
         padding: 20px;
         border-radius: 10px;
       }
-
       .header {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
         margin-bottom: 20px;
       }
-
       .header img {
         width: 50px;
         height: 50px;
         margin-right: 0;
       }
-
       h1 {
         font-size: 1.8rem;
       }
-
       h2 {
         font-size: 1.3rem;
       }
-
       label {
         font-size: 14px;
       }
-
       select, input, button {
         font-size: 16px;
       }
-
       .product-grid {
         grid-template-columns: 1fr;
         gap: 15px;
       }
-
       #totals {
         text-align: left;
         font-size: 14px;
       }
-
       button {
         padding: 14px;
       }
-
       .note {
         font-size: 14px;
       }
-
       .note.small {
         font-size: 12px;
       }
@@ -210,7 +195,6 @@
   </style>
 </head>
 <body>
-  <!-- Slogan bar above container -->
   <div class="slogan-bar">
     <span class="emoji">🌿</span>
     Spice Up Life, The Natural Way — <strong>100% Homemade Masala Powder</strong>
@@ -253,6 +237,10 @@
         { value: 500, label: "500g - ₹300", price: 300 },
         { value: 1000, label: "1kg - ₹600", price: 600 },
       ],
+      rasam_powder: [
+        { value: 500, label: "500g - ₹370", price: 370 },
+        { value: 1000, label: "1kg - ₹740", price: 740 },
+      ],
       curry_powder: [
         { value: 500, label: "500g - ₹400", price: 400 },
         { value: 1000, label: "1kg - ₹800", price: 800 },
@@ -261,6 +249,7 @@
 
     const productNameMap = {
       sambar_powder: "Sambar Powder",
+      rasam_powder: "Rasam Powder",
       curry_powder: "Curry Powder (Meat Masala)",
     };
 
