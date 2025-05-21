@@ -227,21 +227,24 @@
       <button onclick="placeOrder()">Order via WhatsApp</button>
     </div>
 
-    <p class="note">Minimum Order: 500g</p>
+    <p class="note">Minimum Order: 500g across all products</p>
     <p class="note small">Note: Courier charges excluded</p>
   </div>
 
   <script>
     const productQuantities = {
       sambar_powder: [
+        { value: 250, label: "250g - ₹150", price: 150 },
         { value: 500, label: "500g - ₹300", price: 300 },
         { value: 1000, label: "1kg - ₹600", price: 600 },
       ],
       rasam_powder: [
+        { value: 250, label: "250g - ₹185", price: 185 },
         { value: 500, label: "500g - ₹370", price: 370 },
         { value: 1000, label: "1kg - ₹740", price: 740 },
       ],
       curry_powder: [
+        { value: 250, label: "250g - ₹200", price: 200 },
         { value: 500, label: "500g - ₹400", price: 400 },
         { value: 1000, label: "1kg - ₹800", price: 800 },
       ],
@@ -339,7 +342,7 @@
       }
 
       if (totalGrams < 500) {
-        alert("Minimum order quantity is 500g. Please increase the quantity");
+        alert("Minimum order quantity is 500g across all products. Please increase the quantity.");
         return;
       }
 
