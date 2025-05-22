@@ -72,16 +72,21 @@
       display: block;
     }
     select, input {
-      padding: 12px;
+      padding: 10px;
       margin-top: 10px;
       width: 100%;
       box-sizing: border-box;
       border: 2px solid #a0522d;
       border-radius: 8px;
-      font-size: 16px;
+      font-size: 15px;
       background: #fff8f0;
       color: #5c3a21;
       font-family: 'Georgia', serif;
+    }
+    .product-group label,
+    .product-group select,
+    .product-group input {
+      font-size: 15px;
     }
     button {
       padding: 12px;
@@ -298,32 +303,6 @@
       updateTotals();
     }
 
-    function updateTotals() {
-      let totalGrams = 0;
-      let totalPrice = 0;
-
-      Object.keys(productQuantities).forEach((productKey) => {
-        const packs = parseInt(document.getElementById(`${productKey}_packs`).value) || 0;
-        const quantity = parseInt(document.getElementById(`${productKey}_quantity`).value) || 0;
-
-        if (packs > 0 && quantity > 0) {
-          const selectedQuantity = productQuantities[productKey].find(
-            (q) => q.value === quantity
-          );
-          const subtotal = selectedQuantity.price * packs;
-          const grams = packs * quantity;
-
-          totalGrams += grams;
-          totalPrice += subtotal;
-        }
-      });
-
-      document.getElementById("totalQuantity").textContent = totalGrams >= 1000
-        ? (totalGrams / 1000) + "kg"
-        : totalGrams + "g";
-      document.getElementById("totalPrice").textContent = `₹${totalPrice}`;
-    }
-
     function placeOrder() {
       const nameInput = document.getElementById("customerName").value.trim();
       const pincode = document.getElementById("pincode").value.trim();
@@ -372,15 +351,41 @@
         return;
       }
 
-      message += `\n\nTotal Quantity: ${totalGrams >= 1000 ? (totalGrams / 1000) + "kg" : totalGrams + "g"}` +
-                 `\nTotal Price: ₹${totalPrice}` +
-                 `\nDelivery Pincode: ${pincode}\nThank you!`;
+      const qtyText = totalGrams >= 1000
+        ? (totalGrams / 1000) + "kg"
+        : totalGrams + "g";
 
+      message += `\n\nTotal Quantity: ${qtyText}\nTotal Price: ₹${totalPrice}\nDelivery Pincode: ${pincode}\nThank you!`;
       const whatsappUrl = `https://wa.me/916383134699?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, "_blank");
     }
 
     window.onload = createProductInputs;
+
+    function updateTotals() {
+      let totalGrams = 0;
+      let totalPrice = 0;
+
+      Object.keys(productQuantities).forEach((productKey) => {
+        const packs = parseInt(document.getElementById(`${productKey}_packs`).value) || 0;
+        const quantity = parseInt(document.getElementById(`${productKey}_quantity`).value) || 0;
+
+        if (packs > 0 && quantity > 0) {
+          const selectedQuantity = productQuantities[productKey].find(
+            (q) => q.value === quantity
+          );
+          const subtotal = selectedQuantity.price * packs;
+          const grams = packs * quantity;
+
+          totalGrams += grams;
+          totalPrice += subtotal;
+        }
+      });
+
+      document.getElementById("totalQuantity").textContent =
+        totalGrams >= 1000 ? (totalGrams / 1000) + "kg" : totalGrams + "g";
+      document.getElementById("totalPrice").textContent = `₹${totalPrice}`;
+    }
   </script>
 </body>
 </html>
